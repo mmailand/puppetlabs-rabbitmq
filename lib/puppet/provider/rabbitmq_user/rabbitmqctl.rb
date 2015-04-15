@@ -45,7 +45,7 @@ Puppet::Type.type(:rabbitmq_user).provide(:rabbitmqctl, :parent => Puppet::Provi
 
 
   def check_password
-    response = rabbitmqctl('eval', 'rabbit_access_control:check_user_pass_login(list_to_binary("' + resource[:name] + '"), list_to_binary("' + resource[:password] +'")).')
+    response = rabbitmqctl('eval', 'rabbit_auth_backend_internal:user_login_authentication(<<"' + resource[:name] + '">>, [{password, <<"' + resource[:password] +'">>}]).')
     if response.include? 'refused'
         false
     else
